@@ -16,7 +16,7 @@ import re  # noqa: F401
 
 import six
 
-from codechef_client.models.inline_response20011_result_data import InlineResponse20011ResultData  # noqa: F401,E501
+from codechef_client.models.inline_response_200_11_result_data import InlineResponse20011ResultData  # noqa: F401,E501
 
 
 class InlineResponse20011Result(object):
