@@ -1,0 +1,2891 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "CodeChef API",
+    "description": "CodeChef API to support different applications.",
+    "version": "1.0.0"
+  },
+  "securityDefinitions": {
+    "codechef_auth": {
+      "type": "oauth2",
+      "tokenUrl": "https://api.codechef.com/oauth/token",
+      "flow": "application",
+      "scopes": {
+        "basic": "public"
+      }
+    }
+  },
+  "security": [
+    {
+      "codechef_auth": []
+    }
+  ],
+  "host": "api.codechef.com",
+  "schemes": [
+    "https"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "paths": {
+    "/users": {
+      "get": {
+        "summary": "Get the list of users maximum 20.",
+        "description": "Search of users based on usernames. Possible fields: username, fullname, country, state, city, rankings, ratings, occupation, organisation, language",
+        "parameters": [
+          {
+            "name": "fields",
+            "in": "query",
+            "type": "string",
+            "required": false,
+            "description": "Possible fields are: username, fullname, country, state, city, rankings, ratings, occupation, organization, language. \n\nMultiple fields can be entered using comma"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer",
+            "required": false,
+            "description": "Limit of list, maximum 20, eg. 10"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "integer",
+            "required": false,
+            "description": "Starting index of list, eg. 5"
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "type": "string",
+            "required": true,
+            "description": "Search string for username by any prefix of username, eg. search by hacker for usernames like hacker_ratty"
+          }
+        ],
+        "tags": [
+          "Users"
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of user information.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "Default value OK"
+                },
+                "result": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "content": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/definitions/Users"
+                          }
+                        },
+                        "code": {
+                          "type": "integer",
+                          "description": "Returns code according to the result of query performed."
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "Returns code according to the result of query performed."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/me": {
+      "get": {
+        "summary": "Fetches all the details of logged-in user.",
+        "description": "Fetches all the details of logged-in user.",
+        "tags": [
+          "Users"
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of User details.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "Default value OK"
+                },
+                "result": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "content": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/definitions/User"
+                          }
+                        },
+                        "code": {
+                          "type": "integer",
+                          "description": "Returns code according to the result of query performed."
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "Returns code according to the result of query performed."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{username}": {
+      "get": {
+        "summary": "Fetches all the details of a user.",
+        "description": "Complete detail of a user. Possible fields are: username, fullname, country, state, city, rankings, ratings, occupation, organization, language",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "description": "Username of the user, eg. hacker_ratty",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "fields",
+            "in": "query",
+            "description": "Possible fields are : username, fullname, country, state, city, rankings, ratings, occupation, language, organization, problemStats, submissionStats. \n\nMultiple fields can be entered using comma",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Users"
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of User details.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "Default value OK"
+                },
+                "result": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "content": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/definitions/User"
+                          }
+                        },
+                        "code": {
+                          "type": "integer",
+                          "description": "Returns code according to the result of query performed."
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "Returns code according to the result of query performed."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contests": {
+      "get": {
+        "summary": "Get the list of contests.",
+        "description": "Returns a list of contests.",
+        "parameters": [
+          {
+            "name": "fields",
+            "in": "query",
+            "type": "string",
+            "required": false,
+            "description": "Possible fields are: code, name, startDate, endDate. \n\nMultiple fields can be entered using comma."
+          },
+          {
+            "name": "status",
+            "description": "Possible values: past, present, future",
+            "in": "query",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Starting index of the list, eg. 4",
+            "in": "query",
+            "type": "integer",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of contests in a list eg. 10",
+            "in": "query",
+            "type": "integer",
+            "required": false
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "description": "Possible fields are: code, name, startDate, endDate. Default = startDate",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "description": "Possible fields are: asc or desc. Default = desc",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Contests"
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of Contests.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "Default value OK"
+                },
+                "result": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "content": {
+                          "type": "object",
+                          "properties": {
+                            "currentTime": {
+                              "type": "string",
+                              "description": "Current Timestamp."
+                            },
+                            "contestList": {
+                              "type": "array",
+                              "items": {
+                                "$ref": "#/definitions/ContestList"
+                              }
+                            }
+                          }
+                        },
+                        "code": {
+                          "type": "integer",
+                          "description": "Returns code according to the result of query performed."
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "Returns code according to the result of query performed."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contests/{contestCode}": {
+      "get": {
+        "summary": "Get contest details.",
+        "description": "Takes contestCode as a parameter and fetches contest details.",
+        "parameters": [
+          {
+            "name": "contestCode",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "description": "Code of the contest. e.g. -> JAN17 for January Long Challenge, 2017"
+          },
+          {
+            "name": "fields",
+            "in": "query",
+            "description": "Possible fields are: code, name, startDate, endDate, type, bannerFile, freezingTime, announcements, problemsList. \n\nMultiple fields can be entered using comma.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "description": "Possible fields are: problemName, problemCode, successfulSubmissions,  accuracy.  Default = successfulSubmissions",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "description": "Possible fields are: asc or desc.  Default = desc",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Contests"
+        ],
+        "responses": {
+          "200": {
+            "description": "Contest object.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "Default value OK"
+                },
+                "result": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "content": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/definitions/Contest"
+                          }
+                        },
+                        "code": {
+                          "type": "integer",
+                          "description": "Returns code according to the result of query performed."
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "Returns code according to the result of query performed."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contests/{contestCode}/problems/{problemCode}": {
+      "get": {
+        "summary": "Get details of a problem.",
+        "description": "Takes problemCode as the parameter and fetches details of that problem.",
+        "parameters": [
+          {
+            "name": "problemCode",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "description": "Problem code of the problem, eg. SALARY"
+          },
+          {
+            "name": "contestCode",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "description": "Contest code of the contest, eg. PRACTICE, COOK97, JAN17"
+          },
+          {
+            "name": "fields",
+            "in": "query",
+            "description": "Possible fields are: problemCode, author, problemName, languagesSupported, sourceSizeLimit, \n\n\ndateAdded, challengeType, maxTimeLimit, successfulSubmissions, body, totalSubmissions, partialSubmissions, tags. \n\nMultiple fields can be entered using comma.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "ContestProblems"
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of User details.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "Default value OK"
+                },
+                "result": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "content": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/definitions/ContestProblem"
+                          }
+                        },
+                        "code": {
+                          "type": "integer",
+                          "description": "Returns code according to the result of query performed."
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "Returns code according to the result of query performed."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/country": {
+      "get": {
+        "summary": "Get the list of countries on codechef.",
+        "description": "Returns a list of countries.",
+        "parameters": [
+          {
+            "name": "search",
+            "description": "Search string for country by prefix, eg. search by 'jap' will return Japan.",
+            "in": "query",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Starting index of the list, eg. 3",
+            "in": "query",
+            "type": "integer",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of countries in a list, max 100",
+            "in": "query",
+            "type": "integer",
+            "required": false
+          }
+        ],
+        "tags": [
+          "Countries"
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of country names.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "Default value OK"
+                },
+                "result": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "content": {
+                          "type": "object",
+                          "properties": {
+                            "contestList": {
+                              "type": "array",
+                              "items": {
+                                "$ref": "#/definitions/CountryList"
+                              }
+                            }
+                          }
+                        },
+                        "code": {
+                          "type": "integer",
+                          "description": "Returns code according to the result of query performed."
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "Returns code according to the result of query performed."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/institution": {
+      "get": {
+        "summary": "Get the list of institutions on codechef.",
+        "description": "Returns a list of instituitions.",
+        "parameters": [
+          {
+            "name": "search",
+            "description": "Search string for institution, eg. jaypee",
+            "in": "query",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "offset",
+            "description": "Starting index of the list",
+            "in": "query",
+            "type": "integer",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of entities to be fetched, max 100",
+            "in": "query",
+            "type": "integer",
+            "required": false
+          }
+        ],
+        "tags": [
+          "Institutions"
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of institution names.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "Default value OK"
+                },
+                "result": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "content": {
+                          "type": "object",
+                          "properties": {
+                            "contestList": {
+                              "type": "array",
+                              "items": {
+                                "$ref": "#/definitions/Institution"
+                              }
+                            }
+                          }
+                        },
+                        "code": {
+                          "type": "integer",
+                          "description": "Returns code according to the result of query performed."
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "Returns code according to the result of query performed."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/language": {
+      "get": {
+        "summary": "Get the list of languages on codechef.",
+        "description": "Returns a list of languages.",
+        "parameters": [
+          {
+            "name": "search",
+            "description": "Search string for language, eg. C",
+            "in": "query",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Starting index of the list, eg. 3",
+            "in": "query",
+            "type": "integer",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of languages in the list, max 100",
+            "in": "query",
+            "type": "integer",
+            "required": false
+          }
+        ],
+        "tags": [
+          "Languages"
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of languages.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "Default value OK"
+                },
+                "result": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "content": {
+                          "type": "object",
+                          "properties": {
+                            "contestList": {
+                              "type": "array",
+                              "items": {
+                                "$ref": "#/definitions/Language"
+                              }
+                            }
+                          }
+                        },
+                        "code": {
+                          "type": "integer",
+                          "description": "Returns code according to the result of query performed."
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "Returns code according to the result of query performed."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/problems/{categoryName}": {
+      "get": {
+        "summary": "Get the list of problems for given categoryName.",
+        "description": "Returns a list of Problems according to the catergory name provided.",
+        "parameters": [
+          {
+            "name": "categoryName",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "description": "Possible categories are: school, easy, medium, hard, challenge, extcontest"
+          },
+          {
+            "name": "fields",
+            "description": "Possible fields are: problemCode, problemName, successfulSubmissions, accuracy. Multiple fields can be entered using comma.",
+            "in": "query",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Starting index of the list, eg. 3",
+            "in": "query",
+            "type": "integer",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of problems in a list, max 100",
+            "in": "query",
+            "type": "integer",
+            "required": false
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "description": "Possible fields are : problemCode, problemName, successfulSubmissions, accuracy. \n\n\nDefault = successfulSubmissions",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "description": "Possible fields are: asc or desc , Default = asc",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Problems"
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of Contests.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "Default value OK"
+                },
+                "result": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "content": {
+                          "type": "object",
+                          "properties": {
+                            "currentTime": {
+                              "type": "string",
+                              "description": "Current Timestamp."
+                            },
+                            "contestList": {
+                              "type": "array",
+                              "items": {
+                                "$ref": "#/definitions/Problems"
+                              }
+                            }
+                          }
+                        },
+                        "code": {
+                          "type": "integer",
+                          "description": "Returns code according to the result of query performed."
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "Returns code according to the result of query performed."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rankings/{contestCode}": {
+      "get": {
+        "summary": "Return ranklist for a particular contest.",
+        "description": "Returns a ranklist of a contest according to the parameters provided.",
+        "parameters": [
+          {
+            "name": "contestCode",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "description": "Contest code, eg. JAN13"
+          },
+          {
+            "name": "fields",
+            "description": "Possible fields are: rank, username, totalTime, penalty, country, countryCode, institution, rating, institutionType, contestId, contestCode, totalScore, problemScore. Multiple fields can be entered using comma.",
+            "in": "query",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "country",
+            "description": "Country to which the user belongs, eg. India",
+            "in": "query",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "institution",
+            "description": "Institution to which the user belongs, eg. Jaypee Institute of Information Technology",
+            "in": "query",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "institutionType",
+            "description": "Possible values: school, college or organization.",
+            "in": "query",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Starting index of rankings. Offset starts from 0 and can be a multiple of 1500",
+            "in": "query",
+            "type": "integer",
+            "required": false
+          }
+        ],
+        "tags": [
+          "Rankings"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ranklist of a particular contest.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "Default value OK"
+                },
+                "result": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "content": {
+                          "type": "object",
+                          "properties": {
+                            "contestList": {
+                              "type": "array",
+                              "items": {
+                                "$ref": "#/definitions/RankList"
+                              }
+                            }
+                          }
+                        },
+                        "code": {
+                          "type": "integer",
+                          "description": "Returns code according to the result of query performed."
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "Returns code according to the result of query performed."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ratings/{contestType}": {
+      "get": {
+        "summary": "Return ratinglist for a particular contest type.",
+        "description": "Returns a ranklist of a contest according to the parameters provided. Contest types can be : all, cookOff, longChallenge, lunchTime, cookOffSchool, longChallengeSchool, lunchTimeSchool or allSchool.",
+        "parameters": [
+          {
+            "name": "contestType",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "description": "enter contest type for which you want to fetch the ranklist: all, cookOff, longChallenge, lunchTime, cookOffSchool, longChallengeSchool, lunchTimeSchool, allSchool. "
+          },
+          {
+            "name": "fields",
+            "description": "Possible fields are: username, globalRank, countryCode, countryRank, country, institution, institutionType, rating, diff.\n\n Multiple fields can be entered using comma.",
+            "in": "query",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "country",
+            "description": "filter by country: eg India",
+            "in": "query",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "institution",
+            "description": "filter by institution: eg Indian Institute of Technology Delhi. ",
+            "in": "query",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "institutionType",
+            "description": "filter by type of institute: eg: School, College or Organisation",
+            "in": "query",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Starting index of list, eg. 3",
+            "in": "query",
+            "type": "integer",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of ratings in a list, max 25",
+            "in": "query",
+            "type": "integer",
+            "required": false
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "description": "Possible fields are: username, globalRank, rating, diff. Default = globalRank",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "description": "Possible fields are: asc or desc. Default = asc",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Ratings"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ratinglist of users: for particular contest type. ",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "Default value OK"
+                },
+                "result": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "content": {
+                          "type": "object",
+                          "properties": {
+                            "contestList": {
+                              "type": "array",
+                              "items": {
+                                "$ref": "#/definitions/RatingList"
+                              }
+                            }
+                          }
+                        },
+                        "code": {
+                          "type": "integer",
+                          "description": "Returns code according to the result of query performed."
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "Returns code according to the result of query performed."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tags/problems": {
+      "get": {
+        "summary": "Get list of tags/problems for a tag.",
+        "description": "If no filter is provided, it returns a list of tags. On providing tag name, a list of problems with given tag is returned",
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "type": "string",
+            "required": false,
+            "description": "Takes comma separated tags/authors. eg: jan13,kingofnumbers"
+          },
+          {
+            "name": "fields",
+            "description": "Possible fields are: code, tags, author, solved, attempted, partiallySolved. Multiple fields can be entered using comma.",
+            "in": "query",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer",
+            "required": false,
+            "description": "Limit of list, maximum 20, eg. 10"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "integer",
+            "required": false,
+            "description": "Starting index of list, eg. 5"
+          }
+        ],
+        "tags": [
+          "Tags"
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of tag object.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "Default value OK"
+                },
+                "result": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "content": {
+                          "$ref": "#/definitions/Tag"
+                        },
+                        "code": {
+                          "type": "integer",
+                          "description": "Returns code according to the result of query performed."
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "Returns code according to the result of query performed."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/submissions/{submissionId}": {
+      "get": {
+        "summary": "Get details of a submission.",
+        "description": "Takes SubmissionId as the parameter and fetches details of a submission.",
+        "parameters": [
+          {
+            "name": "submissionId",
+            "in": "path",
+            "type": "integer",
+            "required": true
+          },
+          {
+            "name": "fields",
+            "in": "query",
+            "description": "Possible fields are: id, date, username, problemCode, language, contestCode, result, time, memory. Multiple fields can be entered using comma.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Submission"
+        ],
+        "responses": {
+          "200": {
+            "description": "An object of submission.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "Default value OK"
+                },
+                "result": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "content": {
+                          "$ref": "#/definitions/Submission"
+                        },
+                        "code": {
+                          "type": "integer",
+                          "description": "Returns code according to the result of query performed."
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "Returns code according to the result of query performed."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/submissions/": {
+      "get": {
+        "summary": "Get submissions for particular user, problemCode, result and year.",
+        "description": "Takes result (result code), problemCode, year, username as condition parameters.",
+        "parameters": [
+          {
+            "name": "result",
+            "in": "query",
+            "type": "string",
+            "required": false,
+            "description": "Search submission by result, eg. AC, WA, RTE and CTE (AC: accepted, WA: wrong answer, RTE: run time error, CTE: compile time error.)"
+          },
+          {
+            "name": "year",
+            "in": "query",
+            "type": "integer",
+            "required": false,
+            "description": "Search submission by year, eg. 2012"
+          },
+          {
+            "name": "username",
+            "in": "query",
+            "type": "string",
+            "required": false,
+            "description": "Search submission by username, eg. hacker_ratty"
+          },
+          {
+            "name": "language",
+            "in": "query",
+            "type": "string",
+            "required": false,
+            "description": "Search submission by language, eg. C++ 4.3.2"
+          },
+          {
+            "name": "problemCode",
+            "in": "query",
+            "type": "string",
+            "required": false,
+            "description": "Code for problem, eg. SALARY"
+          },
+          {
+            "name": "contestCode",
+            "in": "query",
+            "type": "string",
+            "required": false,
+            "description": "Code of contest, eg. JAN13"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer",
+            "required": false,
+            "description": "limit for no. of submissions. Default = 10, max = 20"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "integer",
+            "required": false,
+            "description": "starting index for list. Default = 0"
+          },
+          {
+            "name": "fields",
+            "in": "query",
+            "description": "Possible fields are: id, date, username, problemCode, language, contestCode, result, time, memory. \n\n Multiple fields can be entered using comma.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Submission"
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of objects submissions.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "Default value OK"
+                },
+                "result": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "content": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/definitions/Submission"
+                          }
+                        },
+                        "code": {
+                          "type": "integer",
+                          "description": "Returns code according to the result of query performed."
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "Returns code according to the result of query performed."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/todo/problems": {
+      "get": {
+        "summary": "Gets problems listed in todo.",
+        "description": "Takes no paramters",
+        "tags": [
+          "Todo"
+        ],
+        "parameters": [
+          {
+            "name": "fields",
+            "in": "query",
+            "description": "Possible fields are: problemCode, contestCode, creationTime, status, tags, problemName, contestUrl, problemUrl, problemRedirect. Multiple fields can be entered using comma.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Provides key value pairs of all the problems listed as todo.Keys will be problem code and values will be problem details.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "Default value OK"
+                },
+                "result": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "content": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/definitions/TodoProblemDetails"
+                          }
+                        },
+                        "code": {
+                          "type": "integer",
+                          "description": "Returns code according to the result of query performed."
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "Returns code according to the result of query performed."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/todo/add": {
+      "post": {
+        "summary": "Adds a problem to todo list.",
+        "description": "Takes problemCode and contestCode of the problem to be added. Look at the samples for example",
+        "tags": [
+          "Todo"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Parameters",
+            "description": "Takes problemCode, contestCode",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/addTodoParameters"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Todo object.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "description": "Shows status code"
+                  },
+                  "result": {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string",
+                            "description": "Message corresponding to successful run of query"
+                          },
+                          "code": {
+                            "type": "integer",
+                            "description": "Code corresponding to successful run of query"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/todo/delete/": {
+      "delete": {
+        "summary": "Deletes a problem added to the todo list.",
+        "description": "Takes problem code as parameter.",
+        "tags": [
+          "Todo"
+        ],
+        "parameters": [
+          {
+            "name": "problemCode",
+            "in": "query",
+            "description": "Username of the user.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Todo object.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "description": "Shows status code"
+                  },
+                  "result": {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string",
+                            "description": "Message corresponding to successful run of query"
+                          },
+                          "code": {
+                            "type": "string",
+                            "description": "Code corresponding to successful run of query"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/todo/delete/all": {
+      "delete": {
+        "summary": "Deletes all the problems added to the todo list.",
+        "description": "Takes no parameters.",
+        "tags": [
+          "Todo"
+        ],
+        "responses": {
+          "200": {
+            "description": "Todo object.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "description": "Shows status code"
+                  },
+                  "result": {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string",
+                            "description": "Message corresponding to successful run of query"
+                          },
+                          "code": {
+                            "type": "string",
+                            "description": "Code corresponding to successful run of query"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sets/": {
+      "get": {
+        "summary": "Get set details for logged in user",
+        "description": "Shows all the sets created by user to whom the access token being used belongs.",
+        "tags": [
+          "Sets"
+        ],
+        "parameters": [
+          {
+            "name": "fields",
+            "in": "query",
+            "description": "Possible fields are: setName, description.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sets object.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "Default value OK"
+                },
+                "result": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "content": {
+                          "$ref": "#/definitions/Sets"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "Message corresponding to successful run of query"
+                        },
+                        "code": {
+                          "type": "string",
+                          "description": "Code corresponding to successful run of query"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sets/add": {
+      "post": {
+        "summary": "Adds set to the user's account to whom the access token being used belongs.",
+        "description": "Takes setName, description as parameters and adds the set to user's account. Look at samples for example",
+        "tags": [
+          "Sets"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Parameters",
+            "description": "Takes setName and description",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/addSetParameters"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sets object.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "description": "Shows status code"
+                  },
+                  "result": {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "type": "object",
+                        "properties": {
+                          "content": {
+                            "type": "object",
+                            "properties": {
+                              "message": {
+                                "type": "string",
+                                "description": "Message corresponding to successful run of query"
+                              },
+                              "code": {
+                                "type": "string",
+                                "description": "Code corresponding to successful run of query"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sets/update": {
+      "put": {
+        "summary": "Updates set of the logged in user's account.",
+        "description": "Takes setName as condition parameters and setName and/or description as extraParameters to update the set in user's account. Look at samples for example",
+        "tags": [
+          "Sets"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Parameters",
+            "description": "Takes setName and description",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/updateSetParameters"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sets object.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "description": "Shows status code"
+                  },
+                  "result": {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "type": "object",
+                        "properties": {
+                          "content": {
+                            "type": "object",
+                            "properties": {
+                              "message": {
+                                "type": "string",
+                                "description": "Message corresponding to successful run of query"
+                              },
+                              "code": {
+                                "type": "integer",
+                                "description": "Code corresponding to successful run of query"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sets/delete": {
+      "delete": {
+        "summary": "Deletes set from the user's account to whom the access token belongs.",
+        "description": "Takes setName as condition parameters to delete the set from the user's account.",
+        "tags": [
+          "Sets"
+        ],
+        "parameters": [
+          {
+            "name": "setName",
+            "in": "query",
+            "type": "string",
+            "required": true,
+            "description": "Enter the name of the set you want to delete"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sets object.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "description": "Shows status code"
+                  },
+                  "result": {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "type": "object",
+                        "properties": {
+                          "content": {
+                            "type": "object",
+                            "properties": {
+                              "message": {
+                                "type": "string",
+                                "description": "Message corresponding to successful run of query"
+                              },
+                              "code": {
+                                "type": "integer",
+                                "description": "Code corresponding to successful run of query"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sets/members/get": {
+      "get": {
+        "summary": "Get set details for particular sets of the logged in user",
+        "description": "Shows the details of the set.",
+        "tags": [
+          "Sets"
+        ],
+        "parameters": [
+          {
+            "name": "setName",
+            "description": "Set name whose member information is required.",
+            "in": "query",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "fields",
+            "description": "Possible fields are: setName, memberName, country, allContestRating,longContestRating, shortContestRating, lTimeContestRating, allSchoolContestRating, longSchoolContestRating, shortSchoolContestRating, lTimeSchoolContestRating. Multiple fields can be entered using comma.",
+            "in": "query",
+            "type": "string",
+            "required": false
+
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sets object.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "Default value OK"
+                },
+                "result": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "content": {
+                          "type": "object",
+                          "properties": {
+                            "content": {
+                              "type": "array",
+                              "items": {
+                                "$ref": "#/definitions/SetMembers"
+                              }
+                            },
+                            "message": {
+                              "type": "string",
+                              "description": "Message corresponding to successful run of query"
+                            },
+                            "code": {
+                              "type": "integer",
+                              "description": "Code corresponding to successful run of query"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sets/members/add": {
+      "post": {
+        "summary": "Adds set members to an existing set of the user to whom the access token belongs.",
+        "description": "Takes setName, memberHandle(username of the member to be added) as parameters. Look at samples for example",
+        "tags": [
+          "Sets"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Parameters",
+            "description": "Takes setName and memberHandle",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/addSetMemberParameters"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sets object.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "Default value OK"
+                },
+                "result": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "description": "Message corresponding to successful run of query"
+                        },
+                        "code": {
+                          "type": "integer",
+                          "description": "Code corresponding to successful run of query"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sets/members/delete": {
+      "delete": {
+        "summary": "Removes members belonging to a set.",
+        "description": "Takes setName, memberHandle as parameters",
+        "tags": [
+          "Sets"
+        ],
+        "parameters": [
+          {
+            "name": "setName",
+            "in": "query",
+            "type": "string",
+            "required": true,
+            "description": "Enter the set name whose set member you want to delete."
+          },
+          {
+            "name": "memberHandle",
+            "in": "query",
+            "description": "Enter the username of the set member you want to remove from set.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sets object.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "Default value OK"
+                },
+                "result": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "description": "Message corresponding to successful run of query"
+                        },
+                        "code": {
+                          "type": "integer",
+                          "description": "Code corresponding to successful run of query"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ide/run": {
+      "post": {
+        "summary": "Runs a code submitted by user.",
+        "description": "Takes input, language and sourceCode",
+        "tags": [
+          "IDE"
+        ],
+        "parameters": [
+          {
+            "name": "Parameters",
+            "in": "body",
+            "description": "Enter the source code, language, input to be executed. look at samples for example.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ideRunSourceCode"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "IDE object.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "Default value OK"
+                },
+                "result": {
+                  "type": "object",
+                  "properties": {
+                    "content": {
+                      "type": "object",
+                      "properties": {
+                        "content": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/definitions/IDE/run"
+                          }
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "Message corresponding to successful run of query"
+                        },
+                        "code": {
+                          "type": "integer",
+                          "description": "Code corresponding to successful run of query"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ide/status": {
+      "get": {
+        "summary": "Get status of submitted code.",
+        "description": "Takes link",
+        "tags": [
+          "IDE"
+        ],
+        "parameters": [
+          {
+            "name": "link",
+            "in": "query",
+            "description": "Enter status code recieved after code execution. \n\n eg. VGQUp0",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "IDE object.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "Default value OK"
+                },
+                "result": {
+                  "type": "object",
+                  "properties": {
+                    "content": {
+                      "type": "object",
+                      "properties": {
+                        "content": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/definitions/IDE/status"
+                          }
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "Message corresponding to successful run of query"
+                        },
+                        "code": {
+                          "type": "integer",
+                          "description": "Code corresponding to successful run of query"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Problems": {
+      "type": "object",
+      "properties": {
+        "catergoryName": {
+          "type": "integer",
+          "description": "Global rank"
+        }
+      }
+    },
+    "Ranking": {
+      "type": "object",
+      "properties": {
+        "global": {
+          "type": "integer",
+          "description": "Global rank"
+        },
+        "country": {
+          "type": "integer",
+          "description": "Country rank"
+        }
+      }
+    },
+    "Rating": {
+      "type": "object",
+      "properties": {
+        "long": {
+          "type": "number",
+          "description": "LongRating of the user(integer)."
+        },
+        "short": {
+          "type": "number",
+          "description": "Cook off of the user(integer)."
+        },
+        "lTime": {
+          "type": "number",
+          "description": "Lunch time rating(integer)."
+        },
+        "allContest": {
+          "type": "number",
+          "description": "All contest rating of the user(integer)."
+        },
+        "allSchoolContest": {
+          "type": "number",
+          "description": "All school contest rating of the user(integer)."
+        },
+        "longSchool": {
+          "type": "number",
+          "description": "Long time rating(integer)."
+        },
+        "shortSchool": {
+          "type": "number",
+          "description": "Short school rating (when user used to be in school)(integer)."
+        },
+        "lTimeSchool": {
+          "type": "number",
+          "description": "Ltime school rating (when user used to be in school)(integer)."
+        }
+      }
+    },
+    "AllRanking": {
+      "type": "object",
+      "properties": {
+        "allContestRanking": {
+          "$ref": "#/definitions/Ranking"
+        },
+        "longRanking": {
+          "$ref": "#/definitions/Ranking"
+        },
+        "shortRanking": {
+          "$ref": "#/definitions/Ranking"
+        },
+        "ltimeRanking": {
+          "$ref": "#/definitions/Ranking"
+        },
+        "allSchoolRanking": {
+          "$ref": "#/definitions/Ranking"
+        },
+        "longSchoolRanking": {
+          "$ref": "#/definitions/Ranking"
+        },
+        "shortSchoolRanking": {
+          "$ref": "#/definitions/Ranking"
+        },
+        "ltimeSchoolRanking": {
+          "$ref": "#/definitions/Ranking"
+        }
+      }
+    },
+    "IDE/run": {
+      "type": "object",
+      "properties": {
+        "link": {
+          "type": "string",
+          "description": "Link using which you can find other details for this submission."
+        },
+        "status": {
+          "type": "string",
+          "description": "Status of the code execution."
+        }
+      }
+    },
+    "IDE/status": {
+      "type": "object",
+      "properties": {
+        "langName": {
+          "type": "string",
+          "description": "Language name in which code was executed"
+        },
+        "langVersion": {
+          "type": "string",
+          "description": "Version of the language used to execute code."
+        },
+        "time": {
+          "type": "integer",
+          "description": "Time taken by code during execution"
+        },
+        "date": {
+          "type": "string",
+          "description": "Date and time of code submission"
+        },
+        "status": {
+          "type": "string",
+          "description": "Status of code execution."
+        },
+        "memory": {
+          "type": "integer",
+          "description": "Memory consumed by code."
+        },
+        "signal": {
+          "type": "integer",
+          "description": "Signal received"
+        },
+        "input": {
+          "type": "string",
+          "description": "Input on which code should run"
+        },
+        "output": {
+          "type": "string",
+          "description": "Output formed as a result of code execution"
+        },
+        "stderr": {
+          "type": "integer",
+          "description": "Standard error (if any)"
+        },
+        "cmpinfo": {
+          "type": "string",
+          "description": "Compilation information"
+        }
+      }
+    },
+    "Sets": {
+      "type": "object",
+      "properties": {
+        "SetName": {
+          "type": "string",
+          "description": "The set name existing in user's list."
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the corresponding set."
+        }
+      }
+    },
+    "SetMembers": {
+      "type": "object",
+      "properties": {
+        "SetName": {
+          "type": "string",
+          "description": "The set name existing in user's list."
+        },
+        "memberHandle": {
+          "type": "string",
+          "description": "Member added in corresponding set."
+        },
+        "country": {
+          "description": "Name of the user to whom the sets belongs.",
+          "$ref": "#/definitions/Country"
+        }
+      }
+    },
+    "Users": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "description": "Unique username of the user."
+        },
+        "fullname": {
+          "type": "string",
+          "description": "Fullname of the user."
+        },
+        "country": {
+          "description": "Country object",
+          "$ref": "#/definitions/Country"
+        },
+        "state": {
+          "description": "Country object",
+          "$ref": "#/definitions/State"
+        },
+        "city": {
+          "description": "Country object",
+          "$ref": "#/definitions/City"
+        },
+        "occupation": {
+          "type": "string",
+          "description": "The User is a student or a professional."
+        },
+        "organization": {
+          "type": "string",
+          "description": "Institute or organization of the user."
+        },
+        "ratings": {
+          "description": "All ratings",
+          "$ref": "#/definitions/Rating"
+        },
+        "rankings": {
+          "description": "All rankings",
+          "$ref": "#/definitions/AllRanking"
+        }
+      }
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "description": "Unique username of the user."
+        },
+        "fullname": {
+          "type": "string",
+          "description": "Fullname of the user."
+        },
+        "country": {
+          "description": "Country object",
+          "$ref": "#/definitions/Country"
+        },
+        "city": {
+          "description": "Country object",
+          "$ref": "#/definitions/City"
+        },
+        "state": {
+          "description": "Country object",
+          "$ref": "#/definitions/State"
+        },
+        "occupation": {
+          "type": "string",
+          "description": "The User is a student or a professional."
+        },
+        "organization": {
+          "type": "string",
+          "description": "Institute or organization of the user."
+        },
+        "problemStats": {
+          "type": "object",
+          "description": "Problems stats of a user contest wise.",
+          "properties": {
+            "solved": {
+              "$ref": "#/definitions/ContestWiseProblems"
+            },
+            "partiallySolved": {
+              "$ref": "#/definitions/ContestWiseProblems"
+            },
+            "attempted": {
+              "$ref": "#/definitions/ContestWiseProblems"
+            }
+          }
+        },
+        "submissionStats": {
+          "type": "object",
+          "description": "Stats of submissions//TODO: Shouldn't we also add a summary for this?",
+          "properties": {
+            "acceptedSolutions": {
+              "type": "integer",
+              "description": "Total number of accepted solutions."
+            },
+            "attemptedProblems": {
+              "type": "integer",
+              "description": "Total number of attempted problems."
+            },
+            "compilationError": {
+              "type": "integer",
+              "description": "Total number of partially solved solutions."
+            },
+            "partiallySolvedProblems": {
+              "type": "integer",
+              "description": "Total number of partially solved problems."
+            },
+            "partiallySolvedSubmissions": {
+              "type": "integer",
+              "description": "Total number of partially solved submissions made by user."
+            },
+            "runtimeError": {
+              "type": "integer",
+              "description": "Total number of run time error solutions."
+            },
+            "submittedSolutions": {
+              "type": "integer",
+              "description": "Total number of attempted problems."
+            },
+            "solvedProblems": {
+              "type": "integer",
+              "description": "Total number of solved solutions."
+            },
+            "timeLimitExceeded": {
+              "type": "integer",
+              "description": "Total number of time limit exceeded solutions."
+            },
+            "wrongSubmissions": {
+              "type": "integer",
+              "description": "Total number of wrong solutions."
+            }
+          }
+        },
+        "ratings": {
+          "description": "All ratings",
+          "$ref": "#/definitions/Rating"
+        },
+        "rankings": {
+          "description": "All rankings",
+          "$ref": "#/definitions/AllRanking"
+        }
+      }
+    },
+    "Contest": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": "Contest code"
+        },
+        "name": {
+          "type": "string",
+          "description": "Contest title/name"
+        },
+        "type": {
+          "type": "string",
+          "description": "Ranklist type/format of the contest"
+        },
+        "URL": {
+          "type": "string",
+          "description": "URL of the contest."
+        },
+        "bannerFile": {
+          "type": "string",
+          "description": "Banner URL of the contest"
+        },
+        "rules": {
+          "type": "string",
+          "description": "Rules of the contest, html"
+        },
+        "announcements": {
+          "type": "string",
+          "description": "Announcements of the contest"
+        },
+        "startDate": {
+          "type": "string",
+          "description": "Start time of the contest"
+        },
+        "endDate": {
+          "type": "string",
+          "description": "End time of the contest"
+        },
+        "freezingTime": {
+          "type": "string",
+          "description": "Freezing time of the contest"
+        },
+        "currentTime": {
+          "type": "string",
+          "description": "Freezing time of the contest"
+        },
+        "problemsList": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string",
+                "description": "Problem code"
+              },
+              "successfulSubmissions": {
+                "type": "integer",
+                "description": "Successful submissions by unique users i.e. only the best submission of all submissions made by the user will be taken into account."
+              },
+              "totalSubmissions": {
+                "type": "number",
+                "description": "Accuracy of the submissions"
+              },
+              "partialSubmissions": {
+                "type": "number",
+                "description": "Number  of partial submissions"
+              },
+              "viewStart": {
+                "type": "string",
+                "description": "Start time of the contest"
+              },
+              "submitStart": {
+                "type": "string",
+                "description": "Submit start time of the contest"
+              },
+              "visibleStart": {
+                "type": "string",
+                "description": "Visible time of the contest"
+              },
+              "end": {
+                "type": "string",
+                "description": "End time of the contest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "ContestList": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": "Contest code"
+        },
+        "name": {
+          "type": "string",
+          "description": "Contest title/name"
+        },
+        "startDate": {
+          "type": "string",
+          "description": "Start time of the contest"
+        },
+        "endDate": {
+          "type": "string",
+          "description": "End time of the contest"
+        },
+        "freezingTime": {
+          "type": "string",
+          "description": "Freezing time of the contest"
+        }
+      }
+    },
+    "RankList": {
+      "type": "object",
+      "properties": {
+        "rank": {
+          "type": "string",
+          "description": "Contest code"
+        },
+        "username": {
+          "type": "string",
+          "description": "Username"
+        },
+        "totalTime": {
+          "type": "string",
+          "description": "Total time"
+        },
+        "penalty": {
+          "type": "integer",
+          "description": "Penalty"
+        },
+        "country": {
+          "type": "string",
+          "description": "Country to which the user belongs."
+        },
+        "countryCode": {
+          "type": "string",
+          "description": "Code of the country eg: IN for India"
+        },
+        "institution": {
+          "type": "string",
+          "description": "Institution to which the user belongs."
+        },
+        "institutionType": {
+          "type": "string",
+          "description": "Whether institution type is school, college, organization."
+        },
+        "contestCode": {
+          "type": "string",
+          "description": "Contest code eg. JAN13"
+        },
+        "totalScore": {
+          "type": "integer",
+          "description": "Total score earned by user"
+        },
+        "problemScore": {
+          "type": "object",
+          "description": "Problem wise score.",
+          "properties": {
+            "problemCode": {
+              "type": "number",
+              "description": "Problem code"
+            },
+            "bestSolutionTime": {
+              "type": "number",
+              "description": "Time when the best solution was submitted."
+            },
+            "penalty": {
+              "type": "integer",
+              "description": "Number of incorrect submissions by user"
+            },
+            "score": {
+              "type": "number",
+              "description": "Points scored by user"
+            }
+          }
+        }
+      }
+    },
+    "RatingList": {
+      "type": "object",
+      "properties": {
+        "globalRank": {
+          "type": "integer",
+          "description": "Global rank of user"
+        },
+        "CountryRank": {
+          "type": "integer",
+          "description": "Rank of user within his country."
+        },
+        "rating": {
+          "type": "number",
+          "description": "Rating of user in give contest type"
+        },
+        "diff": {
+          "type": "number",
+          "description": "Difference in rating"
+        },
+        "username": {
+          "type": "string",
+          "description": "Username"
+        },
+        "country": {
+          "type": "string",
+          "description": "Country name"
+        },
+        "countryCode": {
+          "type": "string",
+          "description": "Country code"
+        },
+        "institution": {
+          "type": "string",
+          "description": "Institution to which the user belongs"
+        },
+        "institutionType": {
+          "type": "string",
+          "description": "Whether institution is school, college or organisation."
+        }
+      }
+    },
+    "ContestProblem": {
+      "type": "object",
+      "properties": {
+        "contestCode": {
+          "type": "string",
+          "description": "Contest Code of which the problem belongs."
+        },
+        "problemCode": {
+          "type": "string",
+          "description": "Problem Code of the problem."
+        },
+        "problemName": {
+          "type": "string",
+          "description": "Name of the problem"
+        },
+        "tags": {
+          "type": "array",
+          "description": "Problem Tags.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "author": {
+          "type": "string",
+          "description": "Author of the problem."
+        },
+        "tester": {
+          "type": "string",
+          "description": "Tester of the problem."
+        },
+        "body": {
+          "type": "string",
+          "description": "Problem statement"
+        },
+        "challengeType": {
+          "type": "string",
+          "description": "Type of the problem. Possible values can be binary, minimize, maximize and subtask."
+        },
+        "languagesSupported": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "maxTimeLimit": {
+          "type": "integer",
+          "description": "Time limit for the problem"
+        },
+        "sourceSizeLimit": {
+          "type": "integer",
+          "description": "Source size limit for the solution"
+        },
+        "successfulSubmissions": {
+          "type": "integer",
+          "description": "Successful submisions by unique users"
+        },
+        "totalSubmissions": {
+          "type": "number",
+          "description": "Total submissions of the problem made."
+        },
+        "partialSubmissions": {
+          "type": "number",
+          "description": "Partial submissions for the problem made."
+        },
+        "viewStart": {
+          "type": "string",
+          "description": "Start time of the contest"
+        },
+        "submitStart": {
+          "type": "string",
+          "description": "Submit start time of the contest"
+        },
+        "visibleStart": {
+          "type": "string",
+          "description": "Visible time of the contest"
+        },
+        "end": {
+          "type": "string",
+          "description": "End time of the contest"
+        }
+      }
+    },
+    "Submission": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "Submission Id."
+        },
+        "problemCode": {
+          "type": "string"
+        },
+        "contestCode": {
+          "type": "string"
+        },
+        "language": {
+          "type": "string"
+        },
+        "result": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string",
+          "description": "Time of submission"
+        },
+        "time": {
+          "type": "string",
+          "description": "Time taken in milliseconds."
+        },
+        "memory": {
+          "type": "integer",
+          "description": "Total Memory consumed in bytes."
+        }
+      }
+    },
+    "Tag": {
+      "type": "object",
+      "properties": {
+        "tag": {
+          "type": "string",
+          "description": "Value"
+        },
+        "type": {
+          "type": "string",
+          "description": "author/tag"
+        },
+        "count": {
+          "type": "integer",
+          "description": "Count of problems with this tag"
+        }
+      }
+    },
+    "Country": {
+      "type": "object",
+      "properties": {
+        "countryName": {
+          "type": "string",
+          "description": "Country names."
+        }
+      }
+    },
+    "Institution": {
+      "type": "object",
+      "properties": {
+        "institutionName": {
+          "type": "string",
+          "description": "Full names of the institutions."
+        }
+      }
+    },
+    "Language": {
+      "type": "object",
+      "properties": {
+        "shortName": {
+          "type": "string",
+          "description": "Short name of the language."
+        }
+      }
+    },
+    "CountryList": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": "Country code"
+        },
+        "name": {
+          "type": "string",
+          "description": "Fullname fo the country"
+        }
+      }
+    },
+    "State": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the state"
+        }
+      }
+    },
+    "City": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the city"
+        }
+      }
+    },
+    "ContestWiseProblems": {
+      "type": "object",
+      "description": "Problems solved by the user contest wise.",
+      "properties": {
+        "contestCode": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Array of problems from the contest depending on criteria."
+        }
+      }
+    },
+    "TodoProblemDetails": {
+      "type": "object",
+      "properties": {
+        "problemCode": {
+          "type": "string",
+          "description": "Problem code corresponding to the problem."
+        },
+        "contestCode": {
+          "type": "string",
+          "description": "Contest code corresponding to the problem."
+        },
+        "creationTime": {
+          "type": "string",
+          "description": "Date and time when the problem was added to todo."
+        },
+        "status": {
+          "type": "string",
+          "description": "Informs about the current status of the problem: whether it is attempted or not."
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "description": "List of tags which are related to the problem."
+          }
+        },
+        "problemName": {
+          "type": "string",
+          "description": "Problem name corresponding to the problem."
+        },
+        "problemRedirect": {
+          "type": "boolean",
+          "description": "Is the problem redirected or not."
+        },
+        "isAddedToPractice": {
+          "type": "boolean",
+          "description": "Is the problem added to practice or not."
+        },
+        "contestUrl": {
+          "type": "string",
+          "description": "The link to the contest to which the problem belongs."
+        },
+        "problemUrl": {
+          "type": "string",
+          "description": "Link to the problem page."
+        }
+      }
+    },
+    "updateSetParameters": {
+      "properties": {
+        "setName": {
+          "type": "string",
+          "description": "Enter the set name in the form of a string.",
+          "example": "Friends"
+        },
+        "setNameNew": {
+          "type": "string",
+          "description": "Enter the set name in the form of a string.",
+          "example": "Friends"
+        },
+        "description": {
+          "type": "string",
+          "description": "Enter the description of the set you want to create.",
+          "example": "contains a list of all my friends"
+        }
+      }
+    },
+    "addSetParameters": {
+      "properties": {
+        "setName": {
+          "type": "string",
+          "description": "Enter the set nsme in the form of a string.",
+          "example": "Friends"
+        },
+        "description": {
+          "type": "string",
+          "description": "Enter the description of the set you want to create.",
+          "example": "contains a list of all my friends"
+        }
+      }
+    },
+    "ideRunSourceCode": {
+      "properties": {
+        "sourceCode": {
+          "type": "string",
+          "description": "Source code of submission.",
+          "example": "#include <iostream>\n int main() { std::cout << \"Hi!\"; return 0; }"
+        },
+        "language": {
+          "type": "string",
+          "description": "language of submission.",
+          "example": "C++ 4.3.2"
+        },
+        "input": {
+          "type": "string",
+          "description": "input of submission.",
+          "example": "1 2 3"
+        }
+      }
+    },
+    "addSetMemberParameters": {
+      "properties": {
+        "setName": {
+          "type": "string",
+          "description": "Enter the set name in the form of a string.",
+          "example": "Friends"
+        },
+        "memberHandle": {
+          "type": "string",
+          "description": "Enter the username in the form of a string.",
+          "example": "testName"
+        }
+      }
+    },
+    "addTodoParameters": {
+      "properties": {
+        "problemCode": {
+          "type": "string",
+          "description": "Enter the problem code of the problem to be added. "
+        },
+        "contestCode": {
+          "type": "string",
+          "description": "Enter the contest code of the problem to be added. "
+        }
+      }
+    },
+    "Error": {
+      "type": "object",
+      "description": "Standard error object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "description": "Default value FAILED"
+        },
+        "result": {
+          "type": "object",
+          "properties": {
+            "errors": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string"
+                  },
+                  "code": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
